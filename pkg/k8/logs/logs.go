@@ -38,14 +38,10 @@ func StreamLogs(d *appsv1.Deployment, container string, c *kubernetes.Clientset,
 		return
 	}()
 
-	var wait time.Duration
 	for !end {
-		time.Sleep(wait * time.Second)
 		pod, err := deployments.GetCNDPod(d, c)
 		if err != nil {
-			if wait < 10 {
-				wait++
-			}
+			time.Sleep(time.Second)
 			continue
 		}
 		var tailLines int64
@@ -54,19 +50,15 @@ func StreamLogs(d *appsv1.Deployment, container string, c *kubernetes.Clientset,
 			pod.Name,
 			&apiv1.PodLogOptions{
 				Container:  container,
-				Timestamps: true,
+				Timestamps: false,
 				Follow:     true,
 				TailLines:  &tailLines,
 			},
 		)
-		readCloser, err = req.Stream()
-		if err != nil {
-			if wait < 10 {
-				wait++
-			}
+		if readCloser, err = req.Stream(); err != nil {
+			time.Sleep(time.Second)
 			continue
 		}
-		wait = 0
 		if err := writeLogs(cancellationCtx, os.Stdout, readCloser); err != nil {
 			log.Infof("couldn't retrieve logs for %s/%s/%s: %s", pod.Name, d.Name, container, err)
 		}
