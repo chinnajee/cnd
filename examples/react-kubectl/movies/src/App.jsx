@@ -43,7 +43,7 @@ class Navigation extends Component {
       <div id="navigation" className="Navigation">
         <nav>
           <ul>
-            <li>Browse</li>
+            <li>Caca</li>
             <li>My list</li>
             <li>Top picks</li>
             <li>Recent</li>

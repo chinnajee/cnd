@@ -11,7 +11,7 @@
     "parcel-bundler": "^1.11.0"
   },
   "scripts": {
-    "start": "parcel src/index.html --port 80 --hmr-port 9000",
+    "start": "parcel src/index.html --port 9000 --hmr-port 9001",
     "build": "parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
